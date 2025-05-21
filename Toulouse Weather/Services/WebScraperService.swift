@@ -14,8 +14,8 @@ protocol WebScraperServiceProtocol {
     /// - Parameters:
     ///   - startDate: The starting date
     ///   - endDate: The ending date
-    /// - Returns: A list of `DailyItem`
-    func fetchDailies(from startDate: Date, to endDate: Date) async throws -> [DailyItem]
+    /// - Returns: A list of `DailyItemDTO`
+    func fetchDailies(from startDate: Date, to endDate: Date) async throws -> [DailyItemDTO]
 }
 
 enum ScraperError: LocalizedError {
@@ -94,7 +94,7 @@ final class WebScraperService: WebScraperServiceProtocol {
         return html
     }
     
-    private func parseDailies(_ html: String) throws -> [DailyItem] {
+    private func parseDailies(_ html: String) throws -> [DailyItemDTO] {
         let document = try SwiftSoup.parse(html)
         
         guard let table = try document.select("div.toprint table").first() else {
@@ -102,7 +102,7 @@ final class WebScraperService: WebScraperServiceProtocol {
         }
         
         let rows = try table.select("tbody tr")
-        return try rows.array().compactMap { row -> DailyItem? in
+        return try rows.array().compactMap { row -> DailyItemDTO? in
             let columns = try row.select("td")
             guard columns.size() == 10,
                   let dateHref = try columns[0].select("a[href]").first(),
@@ -124,7 +124,7 @@ final class WebScraperService: WebScraperServiceProtocol {
             
             Logger.scraping.debug("Parse succeeded for row: \(dateString)")
             
-            return DailyItem(
+            return DailyItemDTO(
                 dateString: "\(dateString)",
                 minTemperature: minTemperature,
                 maxTemperature: maxTemperature,
@@ -141,13 +141,13 @@ final class WebScraperService: WebScraperServiceProtocol {
     
     // MARK: - Publics
         
-    func fetchDailies(from startDate: Date, to endDate: Date) async throws -> [DailyItem] {
+    func fetchDailies(from startDate: Date, to endDate: Date) async throws -> [DailyItemDTO] {
         let urlsString = getMonthsToFetch(from: startDate, to: endDate)
         Logger.scraping.info("Months to fetch: \(urlsString)")
         
-        var weatherData = [DailyItem]()
+        var weatherData = [DailyItemDTO]()
         
-        try await withThrowingTaskGroup(of: [DailyItem].self) { group in
+        try await withThrowingTaskGroup(of: [DailyItemDTO].self) { group in
             
             for urlString in urlsString {
                 guard let url = URL(string: urlString) else {
