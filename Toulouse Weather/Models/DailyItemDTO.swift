@@ -6,7 +6,7 @@
 //
 
 struct DailyItemDTO: Sendable {
-    var dateString: String
+    var date: String
     var minTemperature: String
     var maxTemperature: String
     var avgTemperature: String

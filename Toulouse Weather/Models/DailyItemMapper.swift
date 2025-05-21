@@ -12,7 +12,7 @@ protocol DailyItemMapper {
 final class DailyItemMapperImpl: DailyItemMapper {
     func map(_ item: DailyItemDTO) -> DailyItem {
         DailyItem(
-            dateString: item.dateString,
+            date: item.date,
             minTemperature: item.minTemperature,
             maxTemperature: item.maxTemperature,
             avgTemperature: item.avgTemperature,

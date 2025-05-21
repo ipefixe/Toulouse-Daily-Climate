@@ -9,6 +9,12 @@ import SwiftSoup
 import SwiftUI
 
 struct ToulouseWeather: View {
+    private let viewModel: ToulouseWeatherViewModel
+
+    init(viewModel: ToulouseWeatherViewModel = ToulouseWeatherViewModel()) {
+        self.viewModel = viewModel
+    }
+
     var body: some View {
         ScrollView {
             VStack(alignment: .center, spacing: 20) {
@@ -24,11 +30,28 @@ struct ToulouseWeather: View {
                 Spacer()
             }
             .padding()
+            .onAppear {
+                Task {
+                    await populateView()
+                }
+            }
         }
     }
 
     // MARK: - Privates
 
+    private func populateView() async {
+        guard let startDate = Date.now.add(day: -150),
+              let endDate = Date.now.add(day: -1) else {
+            return
+        }
+
+        do {
+            try await WebScraperService().fetchDailies(from: startDate, to: endDate)
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
 }
 
 #Preview {

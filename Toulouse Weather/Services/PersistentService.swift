@@ -39,7 +39,7 @@ final class PersistentService: PersistentServiceProtocol {
         context.insert(item)
         do {
             try context.save()
-            Logger.persistent.debug("Saved daily item with date: \(item.date)")
+            Logger.persistent.debug("Saved DailyItem with date: \(item.date)")
             return .success(())
         } catch {
             Logger.persistent.error("Failed to save item with date \(item.date): \(error)")
@@ -50,7 +50,7 @@ final class PersistentService: PersistentServiceProtocol {
     func fetchRecentItems(from startDate: Date, to endDate: Date) -> Result<[DailyItem], PersistentServiceError> {
         let descriptor = FetchDescriptor<DailyItem>(
             predicate: #Predicate {
-                $0.date >= startDate && $0.date <= endDate
+                $0.date.date >= startDate && $0.date.date <= endDate
             }
         )
 

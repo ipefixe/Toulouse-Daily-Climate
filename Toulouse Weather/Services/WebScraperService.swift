@@ -125,7 +125,7 @@ final class WebScraperService: WebScraperServiceProtocol {
             Logger.scraping.debug("Parse succeeded for row: \(dateString)")
             
             return DailyItemDTO(
-                dateString: "\(dateString)",
+                date: "\(dateString)",
                 minTemperature: minTemperature,
                 maxTemperature: maxTemperature,
                 avgTemperature: avgTemperature,
@@ -167,7 +167,8 @@ final class WebScraperService: WebScraperServiceProtocol {
             }
             
             for try await items in group {
-                weatherData.append(contentsOf: items)
+                let validItems = items.filter { $0.date.date >= startDate && $0.date.date <= endDate }
+                weatherData.append(contentsOf: validItems)
             }
         }
         
