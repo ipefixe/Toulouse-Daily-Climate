@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 class DailyItem {
-    var date: String
+    var dateString: String
     var minTemperature: String
     var maxTemperature: String
     var avgTemperature: String
@@ -21,14 +21,14 @@ class DailyItem {
     var minPressure: String
     var maxPressure: String
 
-    var dateFormatted: Date {
+    var date: Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-        return dateFormatter.date(from: date) ?? Date.distantPast
+        return dateFormatter.date(from: dateString) ?? Date.distantPast
     }
 
-    init(date: String,
+    init(dateString: String,
          minTemperature: String,
          maxTemperature: String,
          avgTemperature: String,
@@ -38,7 +38,7 @@ class DailyItem {
          precipitation: String,
          minPressure: String,
          maxPressure: String) {
-        self.date = date
+        self.dateString = dateString
         self.minTemperature = minTemperature
         self.maxTemperature = maxTemperature
         self.avgTemperature = avgTemperature
