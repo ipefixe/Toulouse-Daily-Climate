@@ -10,6 +10,7 @@ import SwiftData
 
 @Model
 class DailyItem {
+    @Attribute(.unique)
     var date: String
     var minTemperature: String
     var maxTemperature: String
@@ -42,4 +43,8 @@ class DailyItem {
         self.minPressure = minPressure
         self.maxPressure = maxPressure
     }
+}
+
+extension DailyItem {
+    var rawDate: Date { date.date }
 }

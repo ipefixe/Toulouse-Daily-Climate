@@ -167,7 +167,7 @@ final class WebScraperService: WebScraperServiceProtocol {
             }
             
             for try await items in group {
-                let validItems = items.filter { $0.date.date >= startDate && $0.date.date <= endDate }
+                let validItems = items.filter { $0.rawDate >= startDate && $0.rawDate <= endDate }
                 weatherData.append(contentsOf: validItems)
             }
         }

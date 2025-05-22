@@ -10,22 +10,29 @@ import OSLog
 import SwiftData
 
 protocol PersistentServiceProtocol {
-    /// Save a daily item
-    /// - Parameter item: item to save
-    /// - Returns: Result of operation, `Void` if successful, otherwise a `PersistentServiceError`
-    func save(_ item: DailyItem) -> Result<Void, PersistentServiceError>
+    /// Save DailyItems
+    /// - Parameter items: items to save
+    /// - Returns: Result of operation, `Void` if successful, otherwise throw a `PersistentServiceError` exception
+    func save(_ items: [DailyItem]) throws
 
     /// Fetch Daily items between 2 dates
     /// - Parameters:
     ///   - startDate: From the date we retrieve the items
     ///   - endDate: Fetch items up to this date
-    /// - Returns: All the DailyItems between these 2 dates, otherwise a `PersistentServiceError`
-    func fetchRecentItems(from startDate: Date, to endDate: Date) -> Result<[DailyItem], PersistentServiceError>
+    /// - Returns: All the DailyItems between these 2 dates, otherwise throw a `PersistentServiceError`exception
+    func fetchDailyItems(from startDate: Date, to endDate: Date) throws -> [DailyItem]
 }
 
-enum PersistentServiceError: Error {
+enum PersistentServiceError: LocalizedError {
     case fetchFailed(Error)
-    case saveFailed(Error)
+    case saveFailed(Int, Error)
+
+    var errorDescription: String {
+        return switch self {
+        case .fetchFailed(let error): "Failed to fetch DailyItems: \(error)"
+        case .saveFailed(let count, let error): "Failed to save \(count) dailyItems: \(error)"
+        }
+    }
 }
 
 final class PersistentService: PersistentServiceProtocol {
@@ -35,22 +42,51 @@ final class PersistentService: PersistentServiceProtocol {
         self.context = context
     }
 
-    func save(_ item: DailyItem) -> Result<Void, PersistentServiceError> {
-        context.insert(item)
+    func save(_ items: [DailyItem]) throws {
+        guard !items.isEmpty else {
+            Logger.persistent.debug("No DailyItem to save")
+            return
+        }
+
+        // Sort items to find start and end dates
+        let itemsSorted = items.sorted { $0.rawDate < $1.rawDate }
+        guard let firstItem = itemsSorted.first,
+              let lastItem = itemsSorted.last else { return }
+        let startDate = firstItem.rawDate
+        let endDate = lastItem.rawDate
+
+        // Fetch all items between these 2 dates
+        let itemsSaved: [DailyItem]
+        do {
+            itemsSaved = try fetchDailyItems(from: startDate, to: endDate)
+        } catch {
+            throw PersistentServiceError.fetchFailed(error)
+        }
+        let datesSaved = Set(itemsSaved.map { $0.date })
+
+        // Filter out items already saved
+        let itemsToSave = itemsSorted.filter { !datesSaved.contains($0.date) }
+
+        // Insert remaining new items
+        itemsToSave.forEach { context.insert($0) }
+
+        // Save (only if there are changes)
+        guard context.hasChanges else {
+            Logger.persistent.debug("All \(itemsToSave.count) DailyItems already exist. There is no unsaved changes")
+            return
+        }
         do {
             try context.save()
-            Logger.persistent.debug("Saved DailyItem with date: \(item.date)")
-            return .success(())
+            Logger.persistent.info("Saved \(itemsToSave.count) DailyItems")
         } catch {
-            Logger.persistent.error("Failed to save item with date \(item.date): \(error)")
-            return .failure(.saveFailed(error))
+            throw PersistentServiceError.saveFailed(itemsToSave.count, error)
         }
     }
 
-    func fetchRecentItems(from startDate: Date, to endDate: Date) -> Result<[DailyItem], PersistentServiceError> {
+    func fetchDailyItems(from startDate: Date, to endDate: Date) throws -> [DailyItem] {
         let descriptor = FetchDescriptor<DailyItem>(
             predicate: #Predicate {
-                $0.date.date >= startDate && $0.date.date <= endDate
+                $0.rawDate >= startDate && $0.rawDate <= endDate
             }
         )
 
@@ -58,10 +94,9 @@ final class PersistentService: PersistentServiceProtocol {
             let result = try context.fetch(descriptor)
             let count = result.count
             Logger.persistent.info("Fetched \(count) daily item\(count > 1 ? "s" : "") successfully")
-            return .success(result)
+            return result
         } catch {
-            Logger.persistent.error("Failed to fetch daily items: \(error)")
-            return .failure(.fetchFailed(error))
+            throw PersistentServiceError.fetchFailed(error)
         }
     }
 }

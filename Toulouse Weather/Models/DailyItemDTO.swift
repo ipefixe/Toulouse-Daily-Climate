@@ -5,6 +5,8 @@
 //  Created by Kevin Boulala on 21/05/2025.
 //
 
+import Foundation
+
 struct DailyItemDTO: Sendable {
     var date: String
     var minTemperature: String
@@ -16,4 +18,8 @@ struct DailyItemDTO: Sendable {
     var precipitation: String
     var minPressure: String
     var maxPressure: String
+}
+
+extension DailyItemDTO {
+    var rawDate: Date { date.date }
 }
