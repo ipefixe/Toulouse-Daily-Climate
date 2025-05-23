@@ -10,10 +10,24 @@ import SwiftUI
 
 @main
 struct Toulouse_WeatherApp: App {
+    private let modelContainer: ModelContainer
+
+    init() {
+        do {
+            modelContainer = try ModelContainer(for: DailyItem.self)
+        } catch {
+            fatalError("Failed to create ModelContainer")
+        }
+    }
+
     var body: some Scene {
         WindowGroup {
-            ToulouseWeather()
+            let scraperService = WebScraperService()
+            let persistentService = PersistentService(context: modelContainer.mainContext)
+            let viewModel = ToulouseWeatherViewModel(scraperService: scraperService,
+                                                     persistentService: persistentService)
+            ToulouseWeather(viewModel: viewModel)
         }
-        .modelContainer(for: DailyItem.self)
+        .modelContainer(modelContainer)
     }
 }

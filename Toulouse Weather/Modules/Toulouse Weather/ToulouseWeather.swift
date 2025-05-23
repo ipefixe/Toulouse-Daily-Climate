@@ -5,13 +5,14 @@
 //  Created by Kevin Boulala on 12/05/2025.
 //
 
+import SwiftData
 import SwiftSoup
 import SwiftUI
 
 struct ToulouseWeather: View {
-    private let viewModel: ToulouseWeatherViewModel
+    @ObservedObject private var viewModel: ToulouseWeatherViewModel
 
-    init(viewModel: ToulouseWeatherViewModel = ToulouseWeatherViewModel()) {
+    init(viewModel: ToulouseWeatherViewModel) {
         self.viewModel = viewModel
     }
 
@@ -32,28 +33,27 @@ struct ToulouseWeather: View {
             .padding()
             .onAppear {
                 Task {
-                    await populateView()
+                    await viewModel.loadData(from: 15, to: 1)
                 }
             }
-        }
-    }
-
-    // MARK: - Privates
-
-    private func populateView() async {
-        guard let startDate = Date.now.add(day: -150),
-              let endDate = Date.now.add(day: -1) else {
-            return
-        }
-
-        do {
-            try await WebScraperService().fetchDailies(from: startDate, to: endDate)
-        } catch {
-            print(error.localizedDescription)
         }
     }
 }
 
 #Preview {
-    ToulouseWeather()
+    // TODO: Fix this preview
+    let scraperService = WebScraperService()
+
+    let modelContainer = try! ModelContainer(
+        for: DailyItem.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+    let persistentService = PersistentService(context: modelContainer.mainContext)
+
+    let viewModel = ToulouseWeatherViewModel(
+        scraperService: scraperService,
+        persistentService: persistentService
+    )
+
+    ToulouseWeather(viewModel: viewModel)
 }
