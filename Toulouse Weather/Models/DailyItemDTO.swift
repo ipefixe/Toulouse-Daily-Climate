@@ -8,7 +8,7 @@
 import Foundation
 
 struct DailyItemDTO: Sendable {
-    var date: String
+    var date: Date
     var minTemperature: String
     var maxTemperature: String
     var avgTemperature: String
@@ -18,8 +18,4 @@ struct DailyItemDTO: Sendable {
     var precipitation: String
     var minPressure: String
     var maxPressure: String
-}
-
-extension DailyItemDTO {
-    var rawDate: Date { date.date }
 }

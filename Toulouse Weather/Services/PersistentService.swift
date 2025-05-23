@@ -49,11 +49,11 @@ final class PersistentService: PersistentServiceProtocol {
         }
 
         // Sort items to find start and end dates
-        let itemsSorted = items.sorted { $0.rawDate < $1.rawDate }
+        let itemsSorted = items.sorted { $0.date < $1.date }
         guard let firstItem = itemsSorted.first,
               let lastItem = itemsSorted.last else { return }
-        let startDate = firstItem.rawDate
-        let endDate = lastItem.rawDate
+        let startDate = firstItem.date
+        let endDate = lastItem.date
 
         // Fetch all items between these 2 dates
         let itemsSaved: [DailyItem]
@@ -86,14 +86,14 @@ final class PersistentService: PersistentServiceProtocol {
     func fetchDailyItems(from startDate: Date, to endDate: Date) throws -> [DailyItem] {
         let descriptor = FetchDescriptor<DailyItem>(
             predicate: #Predicate {
-                $0.rawDate >= startDate && $0.rawDate <= endDate
+                $0.date >= startDate && $0.date <= endDate
             }
         )
 
         do {
             let result = try context.fetch(descriptor)
             let count = result.count
-            Logger.persistent.info("Fetched \(count) daily item\(count > 1 ? "s" : "") successfully")
+            Logger.persistent.info("Fetched \(count) DailyItem\(count > 1 ? "s" : "") successfully")
             return result
         } catch {
             throw PersistentServiceError.fetchFailed(error)
