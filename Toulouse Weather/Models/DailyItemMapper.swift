@@ -5,12 +5,12 @@
 //  Created by Kevin Boulala on 21/05/2025.
 //
 
-protocol DailyItemMapper {
-    func map(_ item: DailyItemDTO) -> DailyItem
+protocol DailyItemMapperProtocol {
+    static func map(_ item: DailyItemDTO) -> DailyItem
 }
 
-final class DailyItemMapperImpl: DailyItemMapper {
-    func map(_ item: DailyItemDTO) -> DailyItem {
+final class DailyItemMapper: DailyItemMapperProtocol {
+    static func map(_ item: DailyItemDTO) -> DailyItem {
         DailyItem(
             date: item.date,
             minTemperature: item.minTemperature,
