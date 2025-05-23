@@ -12,5 +12,5 @@ extension Logger {
 
     static let persistent = Logger(subsystem: identifier, category: "PersistentService")
     static let scraping = Logger(subsystem: identifier, category: "ScrapingService")
-    static let app = Logger(subsystem: identifier, category: "App")
+    static let app = Logger(subsystem: identifier, category: "ToulouseWeatherApp")
 }
