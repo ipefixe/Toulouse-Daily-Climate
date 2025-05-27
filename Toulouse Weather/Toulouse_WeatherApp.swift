@@ -27,7 +27,9 @@ struct Toulouse_WeatherApp: App {
             let viewModel = ToulouseWeatherViewModel(scraperService: scraperService,
                                                      persistentService: persistentService)
             ToulouseWeather(viewModel: viewModel)
+                .frame(minWidth: 600, minHeight: 500)
         }
+        .windowResizability(.contentSize)
         .modelContainer(modelContainer)
     }
 }
