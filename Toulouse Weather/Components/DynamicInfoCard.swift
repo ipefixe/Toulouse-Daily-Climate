@@ -32,8 +32,8 @@ struct DynamicInfoCard: View {
          secondaryValue: Double? = nil,
          minValue: Double = 0.0,
          superiorValue: Double = 25.0,
-         minColor: Color = .blue,
-         superiorColor: Color = .red) {
+         minColor: Color = .blue.opacity(0.4),
+         superiorColor: Color = .red.opacity(0.4)) {
         self.mainValue = mainValue
         self.secondaryValue = secondaryValue
         self.minValue = minValue
@@ -43,23 +43,28 @@ struct DynamicInfoCard: View {
     }
 
     var body: some View {
-        RoundedRectangle(cornerRadius: 10.0)
-            .fill(backgroundColor)
-            .stroke(Color.gray, lineWidth: 1.0)
-            .frame(width: 100.0, height: 40.0)
-            .overlay {
-                HStack {
-                    if let mainValue {
-                        Text("\(mainValue.formatted())")
-                            .fontWeight(.bold)
-                    } else {
-                        Text("---")
-                    }
-                    if let secondaryValue {
-                        Text("(\(secondaryValue.formatted()))")
+        ZStack {
+            RoundedRectangle(cornerRadius: 10.0)
+                .fill(.black)
+                .frame(width: 100.0, height: 40.0)
+            RoundedRectangle(cornerRadius: 10.0)
+                .fill(backgroundColor)
+                .stroke(Color.gray, lineWidth: 1.0)
+                .frame(width: 100.0, height: 40.0)
+                .overlay {
+                    HStack {
+                        if let mainValue {
+                            Text("\(mainValue.formatted())")
+                                .fontWeight(.bold)
+                        } else {
+                            Text("---")
+                        }
+                        if let secondaryValue {
+                            Text("(\(secondaryValue.formatted()))")
+                        }
                     }
                 }
-            }
+        }
     }
 }
 

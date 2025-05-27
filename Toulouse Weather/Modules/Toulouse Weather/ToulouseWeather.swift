@@ -26,7 +26,7 @@ struct ToulouseWeather: View {
 
                 // TodayView()
 
-                LastDaysView(viewModel: viewModel)
+                LastDaysView(dailyItems: viewModel.lastDaysViewData)
 
                 Spacer()
             }

@@ -15,7 +15,7 @@ struct SunlightCard: View {
 
     init(timeInterval: TimeInterval? = nil,
          minColor: Color = .black.opacity(0.4),
-         superiorColor: Color = .yellow) {
+         superiorColor: Color = .yellow.opacity(0.4)) {
         self.timeInterval = timeInterval
         self.minColor = minColor
         self.superiorColor = superiorColor
@@ -42,21 +42,26 @@ struct SunlightCard: View {
 
         return minColor.mix(
             with: superiorColor,
-            by: timeInterval / TimeInterval(integerLiteral: 43200)
+            by: timeInterval / TimeInterval(integerLiteral: 43200) // 12h
         )
     }
 
     var body: some View {
-        RoundedRectangle(cornerRadius: 10.0)
-            .fill(backgroundColor)
-            .stroke(Color.gray, lineWidth: 1.0)
-            .frame(width: 100.0, height: 40.0)
-            .overlay {
-                HStack {
-                    Text(duration)
-                        .fontWeight(.bold)
+        ZStack {
+            RoundedRectangle(cornerRadius: 10.0)
+                .fill(.black)
+                .frame(width: 100.0, height: 40.0)
+            RoundedRectangle(cornerRadius: 10.0)
+                .fill(backgroundColor)
+                .stroke(Color.gray, lineWidth: 1.0)
+                .frame(width: 100.0, height: 40.0)
+                .overlay {
+                    HStack {
+                        Text(duration)
+                            .fontWeight(.bold)
+                    }
                 }
-            }
+        }
     }
 }
 
