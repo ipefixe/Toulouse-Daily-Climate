@@ -8,6 +8,12 @@
 import Foundation
 
 extension Date {
+    var shortDate: String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM/dd"
+        return dateFormatter.string(from: self)
+    }
+
     /// Adding months to the current date
     /// - Parameter months: number of month to add
     /// - Returns: A new date with the number of months added

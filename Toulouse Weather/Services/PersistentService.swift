@@ -93,7 +93,9 @@ final class PersistentService: PersistentServiceProtocol {
         do {
             let result = try context.fetch(descriptor)
             let count = result.count
-            Logger.persistent.info("Fetched \(count) DailyItem\(count > 1 ? "s" : "") successfully")
+            let from = startDate.shortDate
+            let to = endDate.shortDate
+            Logger.persistent.info("Fetched \(count) DailyItem\(count > 1 ? "s" : "") successfully (from \(from) to \(to))")
             return result
         } catch {
             throw PersistentServiceError.fetchFailed(error)

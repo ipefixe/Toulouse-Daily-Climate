@@ -8,10 +8,10 @@
 import Foundation
 
 extension String {
-    var date: Date {
+    var date: Date? {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
-        return dateFormatter.date(from: self) ?? .distantPast
+        return dateFormatter.date(from: self)
     }
 }

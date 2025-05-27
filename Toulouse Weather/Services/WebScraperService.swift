@@ -107,7 +107,7 @@ final class WebScraperService: WebScraperServiceProtocol {
             guard columns.size() == 10,
                   let dateHref = try columns[0].select("a[href]").first(),
                   let dateString = try dateHref.attr("href").split(separator: "/").last,
-                  !dateString.isEmpty else {
+                  let date = "\(dateString)".date else {
                 Logger.scraping.warning("Row skipped because of a missing date: \(row)")
                 return nil
             }
@@ -122,10 +122,10 @@ final class WebScraperService: WebScraperServiceProtocol {
             let minPressure = try columns[8].text()
             let maxPressure = try columns[9].text()
             
-            Logger.scraping.debug("Parse succeeded for row: \(dateString)")
+            Logger.scraping.debug("Parse succeeded for row: \(date.shortDate)")
             
             return DailyItemDTO(
-                date: "\(dateString)".date,
+                date: date,
                 minTemperature: minTemperature,
                 maxTemperature: maxTemperature,
                 avgTemperature: avgTemperature,

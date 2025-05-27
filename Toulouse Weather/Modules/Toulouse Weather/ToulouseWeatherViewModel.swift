@@ -32,10 +32,12 @@ class ToulouseWeatherViewModel: ObservableObject {
             return
         }
 
+        try! await Task.sleep(for: .seconds(1)) // TODO: To remove
+
         let expectedDays = start - end
 
         do {
-            Logger.app.info("Load DailyItems from \(startDate) to \(endDate))")
+            Logger.app.info("Load DailyItems from \(startDate.shortDate) to \(endDate.shortDate))")
             var items = try persistentService.fetchDailyItems(from: startDate, to: endDate)
             if items.count != expectedDays {
                 Logger.app.info("Missing data (\(items.count) found, \(expectedDays) expected), scraping data...")
