@@ -13,15 +13,15 @@ final class DailyItemMapper: DailyItemMapperProtocol {
     static func map(_ item: DailyItemDTO) -> DailyItem {
         DailyItem(
             date: item.date,
-            minTemperature: item.minTemperature,
-            maxTemperature: item.maxTemperature,
-            avgTemperature: item.avgTemperature,
-            windSpeed: item.windSpeed,
-            maxWindGust: item.maxWindGust,
+            minTemperature: Double(item.minTemperature),
+            maxTemperature: Double(item.maxTemperature),
+            avgTemperature: Double(item.avgTemperature),
+            windSpeed: Double(item.windSpeed),
+            maxWindGust: Double(item.maxWindGust),
             sunshineDuration: item.sunshineDuration,
-            precipitation: item.precipitation,
-            minPressure: item.minPressure,
-            maxPressure: item.maxPressure
+            precipitation: Double(item.precipitation),
+            minPressure: Double(item.minPressure),
+            maxPressure: Double(item.maxPressure)
         )
     }
 }

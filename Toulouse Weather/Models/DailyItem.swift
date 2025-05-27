@@ -12,26 +12,26 @@ import SwiftData
 class DailyItem {
     @Attribute(.unique)
     var date: Date
-    var minTemperature: String
-    var maxTemperature: String
-    var avgTemperature: String
-    var windSpeed: String
-    var maxWindGust: String
+    var minTemperature: Double?
+    var maxTemperature: Double?
+    var avgTemperature: Double?
+    var windSpeed: Double?
+    var maxWindGust: Double?
     var sunshineDuration: String
-    var precipitation: String
-    var minPressure: String
-    var maxPressure: String
+    var precipitation: Double?
+    var minPressure: Double?
+    var maxPressure: Double?
 
     init(date: Date,
-         minTemperature: String,
-         maxTemperature: String,
-         avgTemperature: String,
-         windSpeed: String,
-         maxWindGust: String,
+         minTemperature: Double?,
+         maxTemperature: Double?,
+         avgTemperature: Double?,
+         windSpeed: Double?,
+         maxWindGust: Double?,
          sunshineDuration: String,
-         precipitation: String,
-         minPressure: String,
-         maxPressure: String) {
+         precipitation: Double?,
+         minPressure: Double?,
+         maxPressure: Double?) {
         self.date = date
         self.minTemperature = minTemperature
         self.maxTemperature = maxTemperature

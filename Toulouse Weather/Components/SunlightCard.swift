@@ -8,10 +8,18 @@
 import SwiftUI
 
 struct SunlightCard: View {
-    @State var timeInterval: TimeInterval?
+    let timeInterval: TimeInterval?
 
-    @State var minColor: Color = .black.opacity(0.4)
-    @State var superiorColor: Color = .yellow
+    let minColor: Color
+    let superiorColor: Color
+
+    init(timeInterval: TimeInterval? = nil,
+         minColor: Color = .black.opacity(0.4),
+         superiorColor: Color = .yellow) {
+        self.timeInterval = timeInterval
+        self.minColor = minColor
+        self.superiorColor = superiorColor
+    }
 
     private var duration: String {
         guard let timeInterval else {

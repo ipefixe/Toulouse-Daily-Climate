@@ -24,9 +24,9 @@ struct ToulouseWeather: View {
                     iconSystemName: "cloud.sun.fill"
                 )
 
-                TodayView()
+                // TodayView()
 
-                Last7DaysView()
+                LastDaysView(viewModel: viewModel)
 
                 Spacer()
             }

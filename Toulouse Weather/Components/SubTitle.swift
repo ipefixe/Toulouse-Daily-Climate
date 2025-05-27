@@ -8,10 +8,15 @@
 import SwiftUI
 
 struct SubTitle: View {
-    @State var title: String = ""
-    @State var trailingText: String?
+    let title: String
+    let trailingText: String?
 
     @Environment(\.colorScheme) private var colorScheme
+
+    init(title: String, trailingText: String? = nil) {
+        self.title = title
+        self.trailingText = trailingText
+    }
 
     private var lineColor: Color {
         colorScheme == .dark ? .white : .black

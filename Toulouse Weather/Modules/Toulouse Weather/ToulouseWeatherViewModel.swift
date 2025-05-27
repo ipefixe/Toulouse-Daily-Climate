@@ -11,7 +11,10 @@ import SwiftData
 
 @MainActor
 class ToulouseWeatherViewModel: ObservableObject {
-    @Published var dailyItems = [DailyItem]()
+    @Published private var dailyItems = [DailyItem]()
+    var lastDaysViewData: [DailyItemViewData] {
+        dailyItems.map { DailyItemViewData(from: $0) }
+    }
 
     private let scraperService: WebScraperServiceProtocol
     private let persistentService: PersistentServiceProtocol

@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct DynamicInfoCard: View {
-    @State var mainValue: Double?
-    @State var secondaryValue: Double?
+    let mainValue: Double?
+    let secondaryValue: Double?
 
-    @State var minValue: Double = 0.0
-    @State var superiorValue: Double = 25.0
+    let minValue: Double
+    let superiorValue: Double
 
-    @State var minColor: Color = .blue
-    @State var superiorColor: Color = .red
+    let minColor: Color
+    let superiorColor: Color
 
     var backgroundColor: Color {
         guard let mainValue else {
@@ -26,6 +26,20 @@ struct DynamicInfoCard: View {
             with: superiorColor,
             by: mainValue / superiorValue
         )
+    }
+
+    init(mainValue: Double? = nil,
+         secondaryValue: Double? = nil,
+         minValue: Double = 0.0,
+         superiorValue: Double = 25.0,
+         minColor: Color = .blue,
+         superiorColor: Color = .red) {
+        self.mainValue = mainValue
+        self.secondaryValue = secondaryValue
+        self.minValue = minValue
+        self.superiorValue = superiorValue
+        self.minColor = minColor
+        self.superiorColor = superiorColor
     }
 
     var body: some View {
