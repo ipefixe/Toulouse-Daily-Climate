@@ -13,7 +13,7 @@ import SwiftData
 class ToulouseWeatherViewModel: ObservableObject {
     @Published private var dailyItems = [DailyItem]()
     var lastDaysViewData: [DailyItemViewData] {
-        dailyItems.map { DailyItemViewData(from: $0) }
+        dailyItems.map { DailyItemViewData(from: $0) }.reversed()
     }
 
     private let scraperService: WebScraperServiceProtocol
@@ -34,8 +34,6 @@ class ToulouseWeatherViewModel: ObservableObject {
               let endDate = Date.now.add(day: -end) else {
             return
         }
-
-        try! await Task.sleep(for: .seconds(1)) // TODO: To remove
 
         let expectedDays = start - end
 
