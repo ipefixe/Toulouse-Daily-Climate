@@ -41,19 +41,11 @@ struct ToulouseWeather: View {
 }
 
 #Preview {
-    // TODO: Fix this preview
-    let scraperService = WebScraperService()
+    let scraperService = MockWebScraperService()
+    let persistentService = MockPersistentService()
 
-    let modelContainer = try! ModelContainer(
-        for: DailyItem.self,
-        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
-    )
-    let persistentService = PersistentService(context: modelContainer.mainContext)
-
-    let viewModel = ToulouseWeatherViewModel(
-        scraperService: scraperService,
-        persistentService: persistentService
-    )
+    let viewModel = ToulouseWeatherViewModel(scraperService: scraperService, persistentService: persistentService)
 
     ToulouseWeather(viewModel: viewModel)
+        .padding()
 }

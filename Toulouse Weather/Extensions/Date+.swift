@@ -39,7 +39,7 @@ extension Date {
         return dateFormatter.string(from: self)
     }
 
-    /// To make it easier to calculate the months to fetch, we modify the dates to a specific day (the first day of the month)
+    /// To make it easier to calculate the months to fetch, we modify date to a specific day (the first day of the month)
     /// 2024-10-23 -> 2024-10-01
     var normalizedDate: Date? {
         var normalizedDate: Date?

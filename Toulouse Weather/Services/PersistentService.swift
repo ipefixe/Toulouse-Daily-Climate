@@ -102,3 +102,41 @@ final class PersistentService: PersistentServiceProtocol {
         }
     }
 }
+
+// TODO: Where to place this code?
+final class MockPersistentService: PersistentServiceProtocol {
+    func save(_ items: [DailyItem]) throws {}
+
+    func fetchDailyItems(from startDate: Date, to endDate: Date) throws -> [DailyItem] {
+        guard let end = Date.now.add(day: -1),
+              let start = Date.now.add(day: -2) else { return [] }
+
+        let dailyItemsDTO = [
+            DailyItemDTO(
+                date: start,
+                minTemperature: "14.6",
+                maxTemperature: "28",
+                avgTemperature: "22.5",
+                windSpeed: "24.1",
+                maxWindGust: "33.3",
+                sunshineDuration: "11h 42min",
+                precipitation: "0",
+                minPressure: "1014.1",
+                maxPressure: "1017.6"
+            ),
+            DailyItemDTO(
+                date: end,
+                minTemperature: "13.7",
+                maxTemperature: "24.8",
+                avgTemperature: "19.6",
+                windSpeed: "18.5",
+                maxWindGust: "26.3",
+                sunshineDuration: "10h 33min",
+                precipitation: "6.8",
+                minPressure: "106.8",
+                maxPressure: "1011.9"
+            )
+        ]
+        return dailyItemsDTO.map { DailyItemMapper.map($0) }
+    }
+}
