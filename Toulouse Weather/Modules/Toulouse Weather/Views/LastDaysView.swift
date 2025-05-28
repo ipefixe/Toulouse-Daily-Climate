@@ -31,7 +31,7 @@ struct LastDaysView: View {
             Spacer()
             Text("Temp. mean (max) (°C)")
                 .frame(width: 100)
-            Text("Wind (gusts) (km/h)")
+            Text("Wind (gust) (km/h)")
                 .frame(width: 100)
             Text("Sunlight")
                 .frame(width: 100)

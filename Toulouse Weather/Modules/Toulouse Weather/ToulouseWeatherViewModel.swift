@@ -49,7 +49,7 @@ class ToulouseWeatherViewModel: ObservableObject {
             }
             dailyItems = items
         } catch {
-            print(error.localizedDescription)
+            Logger.app.error("Error while loading DailyItems: \(error.localizedDescription)")
         }
     }
 }
