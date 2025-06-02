@@ -42,16 +42,14 @@ extension Date {
     /// To make it easier to calculate the months to fetch, we modify date to a specific day (the first day of the month)
     /// 2024-10-23 -> 2024-10-01
     var normalizedDate: Date? {
-        var normalizedDate: Date?
+        var calendar = Calendar.current
+        calendar.timeZone = TimeZone.current
 
-        if Calendar.current.component(.day, from: self) > 1 {
-            normalizedDate = add(month: -1)
-        }
-
-        if let date = normalizedDate {
-            normalizedDate = Calendar.current.date(bySetting: .day, value: 1, of: date)
-        }
-
-        return normalizedDate
+        var components = calendar.dateComponents([.year, .month], from: self)
+        components.day = 1
+        components.hour = 12
+        components.minute = 0
+        components.second = 0
+        return calendar.date(from: components)
     }
 }
